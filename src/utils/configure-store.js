@@ -1,11 +1,18 @@
 import {createStore, applyMiddleware} from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import rootReducer from '../reducers';
 import SpotifyApi from './spotify-api';
 
-const loggerMiddleware = createLogger();
 const spotifyApi = new SpotifyApi();
+
+let middleware = [
+    thunk.withExtraArgument(spotifyApi),
+];
+
+if (window.location.host === 'localhost:3000') {
+    middleware.push(createLogger());
+}
 
 export default function configureStore(preloadedState) {
     spotifyApi.accessToken = preloadedState.accessToken;
@@ -14,9 +21,6 @@ export default function configureStore(preloadedState) {
     return createStore(
         rootReducer,
         preloadedState,
-        applyMiddleware(
-            thunkMiddleware.withExtraArgument(spotifyApi),
-            loggerMiddleware
-        )
+        applyMiddleware(...middleware)
     );
 }

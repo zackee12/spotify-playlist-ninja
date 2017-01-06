@@ -22,11 +22,15 @@ const PlaylistItem = observer(class PlaylistItem extends React.Component {
         let image = playlist.images && playlist.images.length > 0 ? playlist.images[playlist.images.length-1].url : null;
         let owner = playlist.owner && playlist.owner.id ? playlist.owner.id : 'spotify';
         let numTracks = playlist.tracks && playlist.tracks.total ? playlist.tracks.total : '???';
+        let avatarStyle = {};
+        if (image) {
+            avatarStyle.backgroundColor = 'transparent';
+        }
         return <ListItem
             leftCheckbox={<Checkbox checked={this.props.checked} onCheck={this.props.onItemChecked}/>}
             primaryText={playlist.name}
             secondaryText={this.props.showNumTracks ? `with ${numTracks} tracks` : `by ${owner}`}
-            rightAvatar={<Avatar src={image} />}
+            rightAvatar={<Avatar src={image} style={avatarStyle}/>}
             key={playlist.id}
             style={this.props.style}/>;
     }

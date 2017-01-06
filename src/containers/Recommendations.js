@@ -6,6 +6,7 @@ import FlexContainer from '../components/FlexContainer';
 import Slider from 'material-ui/Slider';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import TextField from 'material-ui/TextField';
 
 class Recommendations extends React.Component {
     static contextTypes = {
@@ -66,21 +67,11 @@ class Recommendations extends React.Component {
                     flexAlignItems="center"
                     flexDirection="row"
                     flexJustifyContent="center"
-                    flexWrap="wrap">
-                    <Slider style={styles.sliderOuter} sliderStyle={styles.sliderInner} axis="y" defaultValue={0.5} />
-                    <Slider style={styles.sliderOuter} sliderStyle={styles.sliderInner} axis="y" defaultValue={0.5} />
-                    <Slider style={styles.sliderOuter} sliderStyle={styles.sliderInner} axis="y" defaultValue={0.5} />
-                </FlexContainer>
-                <FlexContainer
-                    flexAlignContent="center"
-                    flexAlignItems="center"
-                    flexDirection="row"
-                    flexJustifyContent="center"
                     flexWrap="wrap"
                     style={styles.feature1}>
                     <div>
-                        <h3>Genre Seeds</h3>
-                        <p>Choose up to 5 seeds</p>
+                        <h3>Playlist Seeds</h3>
+                        <p>Choose up to 5 total seeds from genres, tracks, and artists</p>
                     </div>
                     <FlexContainer
                         flexAlignContent="center"
@@ -89,30 +80,54 @@ class Recommendations extends React.Component {
                         flexJustifyContent="center"
                         flexWrap="nowrap" style={styles.feature1}>
                         <SelectField
-                            floatingLabelText="Genre Seed 1">
+                            floatingLabelText="Genre Seed #1">
                             <MenuItem value={-1} primaryText="None" />
                             {this.props.genreSeeds && this.props.genreSeeds.map((genre, index) => <MenuItem value={index} primaryText={genre} />)}
                         </SelectField>
                         <SelectField
-                            floatingLabelText="Genre Seed 2">
+                            floatingLabelText="Genre Seed #2">
                             <MenuItem value={-1} primaryText="None" />
                             {this.props.genreSeeds && this.props.genreSeeds.map((genre, index) => <MenuItem value={index} primaryText={genre} />)}
                         </SelectField>
                         <SelectField
-                            floatingLabelText="Genre Seed 3">
+                            floatingLabelText="Genre Seed #3">
                             <MenuItem value={-1} primaryText="None" />
                             {this.props.genreSeeds && this.props.genreSeeds.map((genre, index) => <MenuItem value={index} primaryText={genre} />)}
                         </SelectField>
                         <SelectField
-                            floatingLabelText="Genre Seed 4">
+                            floatingLabelText="Genre Seed #4">
                             <MenuItem value={-1} primaryText="None" />
                             {this.props.genreSeeds && this.props.genreSeeds.map((genre, index) => <MenuItem value={index} primaryText={genre} />)}
                         </SelectField>
                         <SelectField
-                            floatingLabelText="Genre Seed 5">
+                            floatingLabelText="Genre Seed #5">
                             <MenuItem value={-1} primaryText="None" />
                             {this.props.genreSeeds && this.props.genreSeeds.map((genre, index) => <MenuItem value={index} primaryText={genre} />)}
                         </SelectField>
+                    </FlexContainer>
+                    <FlexContainer
+                        flexAlignContent="center"
+                        flexAlignItems="center"
+                        flexDirection="column"
+                        flexJustifyContent="center"
+                        flexWrap="nowrap" style={styles.feature1}>
+                        <TextField floatingLabelText="Track Id #1"/>
+                        <TextField floatingLabelText="Track Id #2"/>
+                        <TextField floatingLabelText="Track Id #3"/>
+                        <TextField floatingLabelText="Track Id #4"/>
+                        <TextField floatingLabelText="Track Id #5"/>
+                    </FlexContainer>
+                    <FlexContainer
+                        flexAlignContent="center"
+                        flexAlignItems="center"
+                        flexDirection="column"
+                        flexJustifyContent="center"
+                        flexWrap="nowrap" style={styles.feature1}>
+                        <TextField floatingLabelText="Artist Id #1"/>
+                        <TextField floatingLabelText="Artist Id #2"/>
+                        <TextField floatingLabelText="Artist Id #3"/>
+                        <TextField floatingLabelText="Artist Id #4"/>
+                        <TextField floatingLabelText="Artist Id #5"/>
                     </FlexContainer>
                 </FlexContainer>
                 <FlexContainer

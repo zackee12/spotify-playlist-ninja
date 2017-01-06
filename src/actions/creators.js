@@ -1,5 +1,6 @@
 import Actions from './actions';
 import SpotifyApi from '../utils/spotify-api';
+import helpers from '../utils/helpers';
 
 function simpleCreatorPromiseFn(action) {
     return (arg) => (dispatch) => {
@@ -100,15 +101,9 @@ function fetchPlaylists(includeSpecialPlaylists=true) {
             progress.message = 'Fetching playlists...';
             return dispatch(setProgress(progress));
         };
-        const specialPlaylists = [
-            {id: 'playlist_saved_tracks', name: 'Saved Tracks', tracks: {total: '-'}, owner: {id: 'spotify'}},
-            {id: 'playlist_top_tracks_short_term', name: 'Top Tracks - Short Term', tracks: {total: '-'}, owner: {id: 'spotify'}},
-            {id: 'playlist_top_tracks_medium_term', name: 'Top Tracks - Medium Term', tracks: {total: '-'}, owner: {id: 'spotify'}},
-            {id: 'playlist_top_tracks_long_term', name: 'Top Tracks - Long Term',  tracks: {total: '-'}, owner: {id: 'spotify'}},
-        ];
         return dispatch(requestPlaylists())
             .then(() => api.getMyPlaylistsAll(onProgress))
-            .then((playlists) => dispatch(setPlaylists(includeSpecialPlaylists ? [...specialPlaylists, ...playlists.items] : playlists.items)))
+            .then((playlists) => dispatch(setPlaylists(includeSpecialPlaylists ? [...helpers.getSpecialPlaylists(), ...playlists.items] : playlists.items)))
             .then(() => dispatch(clearProgress()))
             .catch((err) => {
                 return dispatch(setError(err))

@@ -4,7 +4,8 @@
   "private": true,
   "devDependencies": {
     "ncp": "^2.0.0",
-    "react-scripts": "0.8.4"
+    "react-scripts": "0.8.4",
+    "rimraf": "^2.5.4"
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
@@ -25,6 +26,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "build:gh-pages": "npm run build && ncp build/ docs/"
+    "build:gh-pages": "rimraf docs/ && npm run build && ncp build/ docs/ && node scripts/process-docs.js"
   }
 }
