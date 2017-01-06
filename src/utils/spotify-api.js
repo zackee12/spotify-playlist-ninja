@@ -1,6 +1,8 @@
 import fetch from 'isomorphic-fetch';
 import PromiseLimiter from './promise-limiter';
 
+const SCOPES_ALL = 'playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private streaming user-follow-modify user-follow-read user-library-read user-library-modify user-read-private user-read-birthdate user-read-email user-top-read';
+
 
 function sliceIntoChunks(array, chunkSize) {
     let chunks = [];
@@ -100,15 +102,18 @@ export default class SpotifyApi {
     }
 
     static login(csrfToken) {
+
         const params = {
             client_id: 'a3092219dbb94bae90eab20bbb46d67c',
             response_type: 'token',
-            redirect_uri: 'http://localhost:3000/',
+            redirect_uri: 'http://zackee12.github.io/spotify-playlist-ninja/',
             state: csrfToken,
-            //scope: 'playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private streaming user-follow-modify user-follow-read user-library-read user-library-modify user-read-private user-read-birthdate user-read-email user-top-read',
             scope: 'playlist-read-private playlist-read-collaborative user-follow-read user-library-read user-read-private user-read-birthdate user-read-email user-top-read playlist-modify-public',
             show_dialog: 'false'
         };
+        if (window.location.host === 'localhost:3000') {
+            params.redirect_uri = 'http://localhost:3000/';
+        }
         window.location = buildUri(SpotifyApi.AUTH_URI, params);
     }
 
