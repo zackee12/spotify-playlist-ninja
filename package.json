@@ -28,5 +28,5 @@
     "eject": "react-scripts eject",
     "build:gh-pages": "rimraf docs/ && npm run build && ncp build/ docs/ && rimraf build/"
   },
-  "homepage": "spotify-playlist-ninja/"
+  "homepage": "/spotify-playlist-ninja/"
 }
