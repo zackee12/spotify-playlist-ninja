@@ -176,20 +176,20 @@ class Recommendations extends React.Component {
         const actions = [
             <FlatButton
                 label="Cancel"
-                primary={true}
                 onTouchTap={this.onCreatePlaylistsDialogCancelClick}
             />,
             <FlatButton
                 label="Create playlist"
                 primary={true}
                 onTouchTap={this.onCreatePlaylistsDialogOkClick}
+                keyboardFocused={true}
             />,
         ];
         let actions2 = [];
         if (this.state.playlistUri) {
             actions2.push(<a href={this.state.playlistUri} target="_blank"><FlatButton label="Open in new tab" onTouchTap={this.onCompletePlaylistsDialogCloseClick} /></a>);
         }
-        actions2.push(<FlatButton label="Close" primary={true} onTouchTap={this.onCompletePlaylistsDialogCloseClick}/>);
+        actions2.push(<FlatButton label="Close" primary={true} onTouchTap={this.onCompletePlaylistsDialogCloseClick} keyboardFocused={true}/>);
         return (
             <div>
                 <FlexContainer
@@ -238,7 +238,7 @@ class Recommendations extends React.Component {
                     </div>
                 </FlexContainer>
                 {this.props.recommendations &&
-                <Dialog title="Save playlist to library?" open={this.state.showCreatePlaylistDialog} autoScrollBodyContent={true} actions={actions}>
+                <Dialog title="Save playlist to library?" open={this.state.showCreatePlaylistDialog} autoScrollBodyContent={true} actions={actions} onRequestClose={this.onCreatePlaylistsDialogCancelClick}>
                     <TrackTable tracks={this.props.recommendations.tracks}/>
                 </Dialog>
                 }
@@ -255,7 +255,7 @@ class Recommendations extends React.Component {
                     </FloatingActionButton>
                 </div>
                 }
-                <Dialog title="Operation complete" open={this.state.showCompletePlaylistDialog} actions={actions2}>
+                <Dialog title="Operation complete" open={this.state.showCompletePlaylistDialog} actions={actions2} onRequestClose={this.onCompletePlaylistsDialogCloseClick}>
                     Playlist created successfully.
                 </Dialog>
             </div>
