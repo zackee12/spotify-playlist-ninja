@@ -345,7 +345,10 @@ export default class TunableAttributes extends React.Component {
             </FlexContainer>
             <Divider />
             <div style={styles.descriptionContainer}>
-                <h3>Tunable Attribute Types</h3>
+                <h1>Tunable Attributes</h1>
+            </div>
+            <div style={styles.descriptionContainer}>
+                <h3>Types</h3>
                 <h4>Target</h4>
                 <p style={styles.description}>For each of the tunable track attributes (below) a target value may be provided. Tracks with the attribute values nearest to the target values will be preferred. For example, you might request target_energy=0.6 and target_danceability=0.8. All target values will be weighed equally in ranking results.</p>
                 <h4>Max</h4>
@@ -355,7 +358,7 @@ export default class TunableAttributes extends React.Component {
             </div>
             <Divider />
             <div style={styles.descriptionContainer}>
-                <h3>Tunable Attribute Descriptions</h3>
+                <h3>Descriptions</h3>
                 {ATTRIBUTES.map((attribute, index) =>
                     <div key={`tuneables_description_${index}`}>
                         <h4>{attribute.name}</h4>

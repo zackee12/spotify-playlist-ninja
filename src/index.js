@@ -22,4 +22,5 @@ ReactDOM.render(
  11. Refresh token if old
  13. Fix redirecting if logged out and look into openning a new window
  14. add indeterminate progress on recommendations
+ 15. recommendation page needs protection for empty
  **/

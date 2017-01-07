@@ -97,7 +97,6 @@ class App extends React.Component {
     }
 
     render() {
-
         const { progress, error } = this.props;
         const styles = this.getStyles();
         const actions = [
