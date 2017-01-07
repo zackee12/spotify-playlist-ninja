@@ -165,6 +165,9 @@ class Genres extends React.Component {
                 onTouchTap={this.onCompletePlaylistsDialogCloseClick}
                 keyboardFocused={true}/>
         ];
+        const userDisplayNames = {
+            [this.props.profile.id]: this.props.profile.display_name
+        };
         return (
             <div style={styles.root}>
                 <FlexContainer
@@ -211,7 +214,8 @@ class Genres extends React.Component {
                             initialCheckedState={this.state.checkedPlaylists}
                             showNumTracks={false}
                             playlists={this.props.playlists}
-                            onItemChecked={this.onSourcePlaylistItemChecked}/>
+                            onItemChecked={this.onSourcePlaylistItemChecked}
+                            userDisplayNames={userDisplayNames}/>
 
                         <FloatingActionButton
                             onClick={this.onSelectSourcePlaylistDoneBtnClick}
@@ -258,8 +262,8 @@ class Genres extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { progress, playlists, genres } = state;
-    return {progress, playlists: playlists.array, genres: genres.array};
+    const { progress, playlists, genres, profile } = state;
+    return {progress, playlists: playlists.array, genres: genres.array, profile: profile.object};
 }
 
 export default connect(mapStateToProps)(Genres)

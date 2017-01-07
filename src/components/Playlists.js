@@ -15,12 +15,16 @@ const PlaylistItem = observer(class PlaylistItem extends React.Component {
         onItemChecked: React.PropTypes.func.isRequired,
         showNumTracks: React.PropTypes.bool,
         style: React.PropTypes.object,
+        userDisplayNames: React.PropTypes.object
     };
 
     render() {
         const playlist = this.props.playlist;
         let image = playlist.images && playlist.images.length > 0 ? playlist.images[playlist.images.length-1].url : null;
         let owner = playlist.owner && playlist.owner.id ? playlist.owner.id : 'spotify';
+        if (this.props.userDisplayNames && this.props.userDisplayNames[owner]) {
+            owner = this.props.userDisplayNames[owner];
+        }
         let numTracks = playlist.tracks && playlist.tracks.total ? playlist.tracks.total : '???';
         let avatarStyle = {};
         if (image) {
@@ -46,6 +50,7 @@ export default class Playlists extends React.Component {
         onItemChecked: React.PropTypes.func.isRequired,
         showNumTracks: React.PropTypes.bool,
         initialCheckedState: React.PropTypes.array,
+        userDisplayNames: React.PropTypes.object,
     };
 
     state = {
@@ -141,7 +146,8 @@ export default class Playlists extends React.Component {
                         playlist={playlist}
                         checked={this.state.checked[index]}
                         onItemChecked={this.onCheckedFns[index]}
-                        showNumTracks={this.props.showNumTracks}/>;
+                        showNumTracks={this.props.showNumTracks}
+                        userDisplayNames={this.props.userDisplayNames}/>;
                 })
                 }
             </List>
