@@ -108,7 +108,7 @@ export default class SpotifyApi {
             response_type: 'token',
             redirect_uri: 'https://zackee12.github.io/spotify-playlist-ninja/',
             state: csrfToken,
-            scope: 'playlist-read-private playlist-read-collaborative user-follow-read user-library-read user-read-private user-read-birthdate user-read-email user-top-read playlist-modify-public',
+            scope: 'playlist-read-private playlist-read-collaborative user-follow-read user-library-read user-read-private user-read-email user-top-read playlist-modify-public playlist-modify-private',
             show_dialog: 'false'
         };
         if (helpers.isDevelopmentSite()) {
@@ -456,6 +456,33 @@ export default class SpotifyApi {
     }
 
     /**
+     *
+     * @param {String[]} seedTracks
+     * @param {String[]} seedArtists
+     * @param {String[]} seedGenres
+     * @param options
+     * @param {String}   options.market  Optional. An ISO 3166-1 alpha-2 country code. Provide this parameter if you want to apply Track Relinking. Because min_*, max_* and target_* are applied to pools before relinking, the generated results may not precisely match the filters applied. Original, non-relinked tracks are available via the linked_from attribute of the relinked track response.
+     * @param {String}   options.limit  Optional. The target size of the list of recommended tracks. For seeds with unusually small pools or when highly restrictive filtering is applied, it may be impossible to generate the requested number of recommended tracks. Debugging information for such cases is available in the response. Default: 20. Minimum: 1. Maximum: 100.
+     * @param {Number}   options.max_*
+     * @param {Number}   options.min_*
+     * @param {Number}   options.target_*
+     * @returns {Promise.<Object>}
+     */
+    getRecommendations(seedTracks, seedArtists, seedGenres, options) {
+        options = Object.assign({}, options);
+        if (seedTracks && seedTracks.length > 0) {
+            options.seed_tracks = seedTracks.join(',');
+        }
+        if (seedArtists && seedArtists.length > 0) {
+            options.seed_artists = seedArtists.join(',');
+        }
+        if (seedGenres && seedGenres.length > 0) {
+            options.seed_genres = seedGenres.join(',');
+        }
+        return this.request('recommendations', options);
+    }
+
+    /**
      * Create a playlist for a Spotify user. (The playlist will be empty until you add tracks.)
      * @param {String} userId                 The user's Spotify user ID.
      * @param {String} name                   Required. The name for the new playlist, for example "Your Coolest Playlist". This name does not need to be unique; a user may have several playlists with the same name.
@@ -517,7 +544,8 @@ export default class SpotifyApi {
      * @param {String}   name                           Required. The name for the new playlist, for example "Your Coolest Playlist". This name does not need to be unique; a user may have several playlists with the same name.
      * @param {String[]} uris                           A JSON array of the Spotify track URIs to add. A maximum of 100 tracks can be added in one request.
      * @param createPlaylistOptions
-     * @param {Boolean} createPlaylistOptions.position  Optional. The position to insert the tracks, a zero-based index. For example, to insert the tracks in the first position: position=0; to insert the tracks in the third position: position=2. If omitted, the tracks will be appended to the playlist. Tracks are added in the order they are listed in the query string or request body.
+     * @param {Boolean} createPlaylistOptions.public        Optional, default true. If true the playlist will be public, if false it will be private. To be able to create private playlists, the user must have granted the playlist-modify-private scope.
+     * @param {String} createPlaylistOptions.collaborative  Optional, default false. If true the playlist will be collaborative. Note that to create a collaborative playlist you must also set public to false. To create collaborative playlists you must have granted playlist-modify-private and playlist-modify-public scopes.
      * @param addTracksOptions
      * @param {Boolean}  addTracksOptions.position      Optional. The position to insert the tracks, a zero-based index. For example, to insert the tracks in the first position: position=0; to insert the tracks in the third position: position=2. If omitted, the tracks will be appended to the playlist. Tracks are added in the order they are listed in the query string or request body.
      * @returns {Promise}
@@ -526,8 +554,9 @@ export default class SpotifyApi {
         return this.createPlaylist(userId, name, createPlaylistOptions)
             .then((response) => {
                 const playlistId = response.id;
-                return this.addTracksToPlaylistAll(onProgress, userId, playlistId, uris, addTracksOptions);
-            })
+                return this.addTracksToPlaylistAll(onProgress, userId, playlistId, uris, addTracksOptions)
+                    .then(() => response);
+            });
     }
 
     /**
@@ -680,7 +709,7 @@ export default class SpotifyApi {
      * @param {Number}   minTracks - minimum number of tracks per genre
      * @returns {Array}
      */
-    static getGenrePlaylists(tracks, artists, albums, minTracks=10) {
+    static getGenrePlaylists(tracks, artists, albums, minTracks=5) {
         let artistGenresById = {};
         let albumGenresById = {};
         let tracksByGenre = {};

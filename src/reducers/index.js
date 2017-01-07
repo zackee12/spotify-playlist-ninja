@@ -107,6 +107,19 @@ function genreSeeds(state={isFetching: false, array: null}, action) {
     }
 }
 
+function recommendations(state={isFetching: false, object: null}, action) {
+    switch (action.type) {
+        case ACTIONS.REQUEST_RECOMMENDATIONS:
+            return Object.assign({}, state, {isFetching: true});
+        case ACTIONS.SET_RECOMMENDATIONS:
+            return Object.assign({}, state, {isFetching: false, object: action.recommendations});
+        case ACTIONS.CLEAR_RECOMMENDATIONS:
+            return {isFetching: false, object: null};
+        default:
+            return state;
+    }
+}
+
 const rootReducer = combineReducers({
     accessToken,
     csrfToken,
@@ -116,6 +129,7 @@ const rootReducer = combineReducers({
     playlists,
     genres,
     genreSeeds,
+    recommendations,
 });
 
 export default rootReducer;

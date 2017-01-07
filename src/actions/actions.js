@@ -22,6 +22,9 @@ export const ACTIONS = {
     SET_GENRE_SEEDS: 'SET_GENRE_SEEDS',
     CLEAR_GENRE_SEEDS: 'CLEAR_GENRE_SEEDS',
     REQUEST_GENRE_SEEDS: 'REQUEST_GENRE_SEEDS',
+    SET_RECOMMENDATIONS: 'SET_RECOMMENDATIONS',
+    CLEAR_RECOMMENDATIONS: 'CLEAR_RECOMMENDATIONS',
+    REQUEST_RECOMMENDATIONS: 'REQUEST_RECOMMENDATIONS',
 };
 
 export function setAccessToken(accessToken) {
@@ -112,6 +115,17 @@ export function requestGenreSeeds() {
     return {type: ACTIONS.REQUEST_GENRE_SEEDS}
 }
 
+export function setRecommendations(recommendations) {
+    return {type: ACTIONS.SET_RECOMMENDATIONS, recommendations};
+}
+
+export function clearRecommendations() {
+    return {type: ACTIONS.CLEAR_RECOMMENDATIONS};
+}
+
+export function requestRecommendations() {
+    return {type: ACTIONS.REQUEST_RECOMMENDATIONS}
+}
 
 
 export default {
@@ -138,4 +152,7 @@ export default {
     setGenreSeeds,
     clearGenreSeeds,
     requestGenreSeeds,
+    setRecommendations,
+    clearRecommendations,
+    requestRecommendations,
 };

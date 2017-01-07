@@ -26,6 +26,9 @@ export const selectGenres = simpleCreatorPromiseFn(Actions.selectGenres);
 export const setGenreSeeds = simpleCreatorPromiseFn(Actions.setGenreSeeds);
 export const clearGenreSeeds = simpleCreatorPromiseFn(Actions.clearGenreSeeds);
 export const requestGenreSeeds = simpleCreatorPromiseFn(Actions.requestGenreSeeds);
+export const setRecommendations = simpleCreatorPromiseFn(Actions.setRecommendations);
+export const clearRecommendations = simpleCreatorPromiseFn(Actions.clearRecommendations);
+export const requestRecommendations = simpleCreatorPromiseFn(Actions.requestRecommendations);
 
 export function setAccessToken(accessToken) {
     return (dispatch, getState, api) => {
@@ -193,6 +196,56 @@ function fetchGenreSeeds() {
     };
 }
 
+function fetchRecommendations(seedTracks, seedArtists, seedGenres, tuneables, numTracks) {
+    return (dispatch, getState, api) => {
+        const state = getState();
+        let options = {
+            market: state.profile.object.country,
+            limit: numTracks,
+            ...tuneables
+        };
+        return dispatch(requestRecommendations())
+            .then(() => api.getRecommendations(seedTracks, seedArtists, seedGenres, options))
+            .then((recommendations) => {
+                recommendations.tracks.sort((a, b) => {
+                    if (a.artists[0].name < b.artists[0].name) return -1;
+                    if (a.artists[0].name > b.artists[0].name) return 1;
+                    if (a.name < b.name) return -1;
+                    if (a.name > b.name) return 1;
+                    return 0;
+                });
+                return dispatch(setRecommendations(recommendations))
+            })
+            .catch((err) => {
+                return dispatch(setError(err))
+                    .then(() => {
+                        return Promise.reject(err);
+                    });
+            });
+    };
+}
+
+function createPlaylist(name, tracks, isPublic) {
+    return (dispatch, getState, api) => {
+
+        const onProgress = (progress) => {
+            progress.message = `Creating playlist and adding tracks (${progress.current} of ${progress.last})...`;
+            return dispatch(setProgress(progress));
+        };
+        const state = getState();
+        const uris = tracks.map((track) => track.uri);
+        return api.createPlaylistAndAddTracks(onProgress, state.profile.object.id, name, uris, {public: isPublic})
+            .then((response) => {
+                return dispatch(clearProgress())
+                    .then(() => response);
+            })
+            .catch((err) => {
+                return dispatch(setError(err))
+                    .then(() => dispatch(clearProgress()))
+                    .then(() => Promise.reject(err));
+            });
+    };
+}
 
 function fetchIfNeeded(fn, stateName, thisArg=null) {
     return (...args) => (dispatch, getState) => {
@@ -208,6 +261,7 @@ export const fetchProfileIfNeeded = fetchIfNeeded(fetchProfile, 'profile');
 export const fetchPlaylistsIfNeeded = fetchIfNeeded(fetchPlaylists, 'playlists');
 export const fetchGenresIfNeeded = fetchIfNeeded(fetchGenres, 'genres');
 export const fetchGenreSeedsIfNeeded = fetchIfNeeded(fetchGenreSeeds, 'genreSeeds');
+export const fetchRecommendationsIfNeeded = fetchIfNeeded(fetchRecommendations, 'recommendations');
 
 export default {
     setAccessToken,
@@ -238,4 +292,9 @@ export default {
     clearGenreSeeds,
     requestGenreSeeds,
     fetchGenreSeedsIfNeeded,
+    setRecommendations,
+    clearRecommendations,
+    requestRecommendations,
+    fetchRecommendationsIfNeeded,
+    createPlaylist,
 };
