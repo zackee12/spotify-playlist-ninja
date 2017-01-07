@@ -32,6 +32,7 @@ class Genres extends React.Component {
         checkedPlaylists: null,
         checkedGenres: null,
         showCreatePlaylistDialog: false,
+        showCompletePlaylistDialog: false,
     };
 
     componentWillMount() {
@@ -41,6 +42,10 @@ class Genres extends React.Component {
     }
 
     componentDidMount() {
+        this.fetchPlaylists();
+    }
+
+    fetchPlaylists = () => {
         this.setState({step: STEP_LOAD_PLAYLISTS}, () => {
             this.props.dispatch(Actions.clearPlaylists())
                 .then(() => {
@@ -52,7 +57,7 @@ class Genres extends React.Component {
                         step: STEP_SELECT_PLAYLISTS});
                 });
         });
-    }
+    };
 
     onSourcePlaylistItemChecked = (checkedPlaylists) => {
         this.setState({checkedPlaylists});
@@ -86,7 +91,7 @@ class Genres extends React.Component {
                 return this.props.dispatch(Actions.createGenrePlaylists());
             })
             .then(() => {
-                this.setState({step: STEP_DONE});
+                this.setState({step: STEP_DONE, showCompletePlaylistDialog: true});
             })
             .catch((err) => {
                 console.log('Genres ', err);
@@ -97,6 +102,10 @@ class Genres extends React.Component {
         if (this.getCheckedGenreCount() > 0) {
             this.setState({showCreatePlaylistDialog: true});
         }
+    };
+
+    onCompletePlaylistsDialogCloseClick = () => {
+        this.setState({showCompletePlaylistDialog: false});
     };
 
     getCheckedGenreCount() {
@@ -141,7 +150,6 @@ class Genres extends React.Component {
         const actions = [
             <FlatButton
                 label="Cancel"
-                primary={true}
                 onTouchTap={this.onCreatePlaylistsDialogCancelClick}
             />,
             <FlatButton
@@ -150,9 +158,15 @@ class Genres extends React.Component {
                 onTouchTap={this.onCreatePlaylistsDialogOkClick}
             />,
         ];
+        const actions2 = [
+            <FlatButton
+                label="Close"
+                primary={true}
+                onTouchTap={this.onCompletePlaylistsDialogCloseClick}
+                keyboardFocused={true}/>
+        ];
         return (
             <div style={styles.root}>
-
                 <FlexContainer
                     flexAlignContent="center"
                     flexAlignItems="center"
@@ -163,6 +177,9 @@ class Genres extends React.Component {
 
                     <h1>Create Genre Playlists</h1>
                     <p>Create playlists organized by genre from your playlists, saved tracks, and top tracks</p>
+                    {this.state.step === STEP_DONE &&
+                    <RaisedButton onClick={this.fetchPlaylists} label="Start Over" primary={true}/>
+                    }
                 </FlexContainer>
                 <FlexContainer
                     flexAlignContent="center"
@@ -180,9 +197,6 @@ class Genres extends React.Component {
                     }
                     {this.state.step === STEP_SELECT_GENRES &&
                     <h3 style={styles.messageText}>Select genre playlists to save</h3>
-                    }
-                    {this.state.step === STEP_DONE &&
-                    <h3 style={styles.messageText}>Finished creating playlists</h3>
                     }
                 </FlexContainer>
                 {this.state.step === STEP_SELECT_PLAYLISTS &&
@@ -228,12 +242,16 @@ class Genres extends React.Component {
                         </FloatingActionButton>
                         <Dialog
                             open={this.state.showCreatePlaylistDialog}
-                            title="Are you sure???"
+                            title="Create playlists"
                             actions={actions}>
                             Do you want to create {this.getCheckedGenreCount()} playlists?
                         </Dialog>
+
                     </FlexContainer>
                 }
+                <Dialog title="Operation complete" open={this.state.showCompletePlaylistDialog} actions={actions2} onRequestClose={this.onCompletePlaylistsDialogCloseClick}>
+                    Playlist created successfully.
+                </Dialog>
             </div>
         );
     }
