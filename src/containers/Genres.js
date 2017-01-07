@@ -42,14 +42,19 @@ class Genres extends React.Component {
 
     fetchPlaylists = () => {
         this.setState({step: STEP_LOAD_PLAYLISTS}, () => {
-            this.props.dispatch(Actions.clearPlaylists())
+            return this.props.dispatch(Actions.fetchProfileIfNeeded())
+                .then(() => {
+                    return this.props.dispatch(Actions.clearPlaylists());
+                })
                 .then(() => {
                     return this.props.dispatch(Actions.fetchPlaylistsIfNeeded());
                 })
                 .then(() => {
                     this.setState({
                         checkedPlaylists: new Array(this.props.playlists.length).fill(true),
-                        step: STEP_SELECT_PLAYLISTS});
+                        step: STEP_SELECT_PLAYLISTS,
+                        showCreatePlaylistDialog: false,
+                        showCompletePlaylistDialog: false,});
                 });
         });
     };

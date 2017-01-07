@@ -39,7 +39,10 @@ class Recommendations extends React.Component {
     }
 
     componentDidMount() {
-        this.props.dispatch(Actions.fetchGenreSeedsIfNeeded());
+        this.props.dispatch(Actions.fetchProfileIfNeeded())
+            .then(() => {
+                return this.props.dispatch(Actions.fetchGenreSeedsIfNeeded());
+            });
     }
 
     onGenreSeedsChange = (trackSeeds, artistSeeds, genreSeeds) => {
