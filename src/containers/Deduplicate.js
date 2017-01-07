@@ -1,16 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { hashHistory } from 'react-router';
+import helpers from '../utils/helpers';
 
 class Deduplicate extends React.Component {
 
-    static propTypes = {
-        isLoggedIn: React.PropTypes.func.isRequired,
-    };
-
     componentWillMount() {
-        if (!this.props.isLoggedIn()) {
-            hashHistory.push('/');
+        if (!this.props.hasAccessToken) {
+            helpers.redirectTo('/');
         }
     }
 
@@ -29,4 +24,4 @@ function mapStateToProps(state) {
     return {profile};
 }
 
-export default connect(mapStateToProps)(Deduplicate)
+export default helpers.connectRedux(mapStateToProps, Deduplicate);

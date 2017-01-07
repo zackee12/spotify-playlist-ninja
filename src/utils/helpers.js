@@ -1,10 +1,12 @@
 import SpotifyIconGreen from '../images/Spotify_Icon_RGB_Green.png';
+import { connect } from 'react-redux';
+import { hashHistory } from 'react-router';
 
-export function isDevelopmentSite() {
+function isDevelopmentSite() {
     return window.location.host === 'localhost:3000';
 }
 
-export function getSpecialPlaylists() {
+function getSpecialPlaylists() {
     return [
         {
             id: 'playlist_saved_tracks',
@@ -55,9 +57,27 @@ function clipNumber(value, min, max) {
     return Math.max(Math.min(value, max), min);
 }
 
+function redirectTo(path) {
+    hashHistory.push(path);
+}
+
+function mapStateToPropsCreator(fn) {
+    return (state) => {
+        let props = fn(state);
+        props.hasAccessToken = !!state.accessToken;
+        return props;
+    };
+}
+
+function connectRedux(mapStateToProps, Component) {
+    return connect(mapStateToPropsCreator(mapStateToProps))(Component)
+}
+
 export default {
     isDevelopmentSite,
     getSpecialPlaylists,
     formatMilliseconds,
     clipNumber,
+    redirectTo,
+    connectRedux,
 };

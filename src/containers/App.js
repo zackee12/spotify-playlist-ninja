@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { hashHistory } from 'react-router';
+import React from 'react'
+import helpers from '../utils/helpers';
 import Actions from '../actions'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -14,7 +13,7 @@ import Ninja from '../components/Ninja';
 
 const muiTheme = getMuiTheme(darkBaseTheme);
 
-class App extends Component {
+class App extends React.Component {
 
     onLoginClick = () => {
         const csrfToken = SpotifyApi.generateCsrfToken();
@@ -27,20 +26,16 @@ class App extends Component {
     onLogoutClick = () => {
         this.props.dispatch(Actions.clearTokens())
             .then(() => {
-                hashHistory.push('/');
+                helpers.redirectTo('/');
             });
     };
 
     onTitleTouchTap = () => {
-        hashHistory.push('/');
+        helpers.redirectTo('/');
     };
 
     onErrorDialogClick = () => {
         this.props.dispatch(Actions.clearError());
-    };
-
-    isLoggedIn = () => {
-        return this.props.accessToken && !this.props.profile.isFetching && this.props.profile.object;
     };
 
     getStyles() {
@@ -116,7 +111,7 @@ class App extends Component {
 
         );
 
-        const appBarBtn = this.isLoggedIn() ?
+        const appBarBtn = this.props.hasAccessToken ?
             <FlatButton label="Logout" onClick={this.onLogoutClick} /> :
             <FlatButton label="Login" onClick={this.onLoginClick}  />;
 
@@ -135,7 +130,7 @@ class App extends Component {
                         <LinearProgress mode="determinate" value={progress.percent} color={muiTheme.palette.accent1Color}/>
                     </div>
                     <div style={styles.childContainer}>
-                        {React.cloneElement(this.props.children, {isLoggedIn: this.isLoggedIn})}
+                        {React.cloneElement(this.props.children, {})}
                     </div>
                     {error &&
                     <Dialog
@@ -158,4 +153,4 @@ function mapStateToProps(state) {
     return {accessToken, profile, progress, error};
 }
 
-export default connect(mapStateToProps)(App)
+export default helpers.connectRedux(mapStateToProps, App);

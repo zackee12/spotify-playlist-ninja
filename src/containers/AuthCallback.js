@@ -1,6 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { hashHistory } from 'react-router';
+import helpers from '../utils/helpers';
 import Actions from '../actions';
 
 class AuthCallback extends React.Component {
@@ -12,7 +11,7 @@ class AuthCallback extends React.Component {
             dispatch(Actions.clearAccessToken());
             dispatch(Actions.clearCsrfToken());
         }
-        hashHistory.push('/');
+        helpers.redirectTo('/');
     }
 
     render() {
@@ -25,4 +24,4 @@ function mapStateToProps(state) {
     return {csrfToken};
 }
 
-export default connect(mapStateToProps)(AuthCallback)
+export default helpers.connectRedux(mapStateToProps, AuthCallback);

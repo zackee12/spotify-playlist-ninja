@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import helpers from '../utils/helpers';
 import Profile from '../components/Profile';
 import FlexContainer from '../components/FlexContainer';
 import ImageFeature from '../components/ImageFeature';
@@ -30,7 +30,7 @@ class Home extends React.Component {
         const styles = this.getStyles();
         return (
             <div>
-                {this.props.isLoggedIn() &&
+                {this.props.hasAccessToken && !profile.isFetching && profile.object &&
                 <div style={styles.root}>
                     <Profile profile={profile.object} style={styles.profile}/>
                     <FlexContainer
@@ -56,4 +56,4 @@ function mapStateToProps(state) {
     return {profile};
 }
 
-export default connect(mapStateToProps)(Home)
+export default helpers.connectRedux(mapStateToProps, Home);

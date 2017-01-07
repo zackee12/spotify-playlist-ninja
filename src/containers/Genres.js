@@ -1,6 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { hashHistory } from 'react-router';
+import helpers from '../utils/helpers';
 import Actions from '../actions';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlexContainer from '../components/FlexContainer';
@@ -23,10 +22,6 @@ class Genres extends React.Component {
         muiTheme: React.PropTypes.object
     };
 
-    static propTypes = {
-        isLoggedIn: React.PropTypes.func.isRequired,
-    };
-
     state = {
         step: STEP_LOAD_PLAYLISTS,
         checkedPlaylists: null,
@@ -36,8 +31,8 @@ class Genres extends React.Component {
     };
 
     componentWillMount() {
-        if (!this.props.isLoggedIn()) {
-            hashHistory.push('/');
+        if (!this.props.hasAccessToken) {
+            helpers.redirectTo('/');
         }
     }
 
@@ -165,9 +160,14 @@ class Genres extends React.Component {
                 onTouchTap={this.onCompletePlaylistsDialogCloseClick}
                 keyboardFocused={true}/>
         ];
-        const userDisplayNames = {
-            [this.props.profile.id]: this.props.profile.display_name
-        };
+        let userDisplayNames;
+        if (this.props.profile && this.props.profile.id) {
+            userDisplayNames = {
+                [this.props.profile.id]: this.props.profile.display_name
+            };
+        } else {
+            userDisplayNames = {};
+        }
         return (
             <div style={styles.root}>
                 <FlexContainer
@@ -266,4 +266,4 @@ function mapStateToProps(state) {
     return {progress, playlists: playlists.array, genres: genres.array, profile: profile.object};
 }
 
-export default connect(mapStateToProps)(Genres)
+export default helpers.connectRedux(mapStateToProps, Genres);

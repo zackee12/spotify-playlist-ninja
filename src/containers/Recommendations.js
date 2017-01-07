@@ -1,6 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { hashHistory } from 'react-router';
+import helpers from '../utils/helpers';
 import Actions from '../actions';
 import FlexContainer from '../components/FlexContainer';
 import RecommendationSeeds from '../components/RecommendationSeeds';
@@ -20,10 +19,6 @@ class Recommendations extends React.Component {
         muiTheme: React.PropTypes.object
     };
 
-    static propTypes = {
-        isLoggedIn: React.PropTypes.func.isRequired,
-    };
-
     state = {
         trackSeeds: null,
         artistSeeds: null,
@@ -38,9 +33,12 @@ class Recommendations extends React.Component {
     };
 
     componentWillMount() {
-        if (!this.props.isLoggedIn()) {
-            hashHistory.push('/');
+        if (!this.props.hasAccessToken) {
+            helpers.redirectTo('/');
         }
+    }
+
+    componentDidMount() {
         this.props.dispatch(Actions.fetchGenreSeedsIfNeeded());
     }
 
@@ -268,4 +266,4 @@ function mapStateToProps(state) {
     return {genreSeeds: genreSeeds.array, recommendations: recommendations.object};
 }
 
-export default connect(mapStateToProps)(Recommendations)
+export default helpers.connectRedux(mapStateToProps, Recommendations);
