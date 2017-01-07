@@ -40,15 +40,7 @@ class Genres extends React.Component {
         }
     }
 
-    onSourcePlaylistItemChecked = (checkedPlaylists) => {
-        this.setState({checkedPlaylists});
-    };
-
-    onGenrePlaylistItemChecked = (checkedGenres) => {
-        this.setState({checkedGenres})
-    };
-
-    onFetchPlaylistBtnClicked = () => {
+    componentDidMount() {
         this.setState({step: STEP_LOAD_PLAYLISTS}, () => {
             this.props.dispatch(Actions.clearPlaylists())
                 .then(() => {
@@ -60,6 +52,14 @@ class Genres extends React.Component {
                         step: STEP_SELECT_PLAYLISTS});
                 });
         });
+    }
+
+    onSourcePlaylistItemChecked = (checkedPlaylists) => {
+        this.setState({checkedPlaylists});
+    };
+
+    onGenrePlaylistItemChecked = (checkedGenres) => {
+        this.setState({checkedGenres})
     };
 
     onSelectSourcePlaylistDoneBtnClick = () => {
@@ -163,12 +163,6 @@ class Genres extends React.Component {
 
                     <h1>Create Genre Playlists</h1>
                     <p>Create playlists organized by genre from your playlists, saved tracks, and top tracks</p>
-                    {this.state.step <= STEP_SELECT_PLAYLISTS && !this.props.isFetching &&
-                        <RaisedButton
-                            label={"Fetch Playlists"}
-                            primary={true}
-                            onClick={this.onFetchPlaylistBtnClicked} />
-                    }
                 </FlexContainer>
                 <FlexContainer
                     flexAlignContent="center"
