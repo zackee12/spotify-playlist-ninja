@@ -8,6 +8,11 @@ import TextField from 'material-ui/TextField';
 const SEED_TYPE_GENRE = 0;
 const SEED_TYPE_TRACK = 1;
 const SEED_TYPE_ARTIST = 2;
+//https://open.spotify.com/track/5gdfUvZS4OdMA7BJtVG2tJ
+//spotify:track:5gdfUvZS4OdMA7BJtVG2tJ
+
+//https://open.spotify.com/artist/2ka8z2lwkcp13fG8Wyv3xU
+//spotify:artist:2ka8z2lwkcp13fG8Wyv3xU
 
 export default class RecommendationSeeds extends React.Component {
 
@@ -84,8 +89,13 @@ export default class RecommendationSeeds extends React.Component {
 
     onChangeArtistOrTrackId = (index) => (event, newValue) => {
         this.setState((state) => {
+            console.log(event, newValue);
             let seeds = [...state.seeds];
-            seeds[index].value = newValue;
+            seeds[index].value = newValue
+                .replace('https://open.spotify.com/track/', '')
+                .replace('spotify:track:', '')
+                .replace('https://open.spotify.com/artist/', '')
+                .replace('spotify:artist:', '');
             this.broadcast(seeds);
             return {seeds};
         });
@@ -108,7 +118,7 @@ export default class RecommendationSeeds extends React.Component {
                 marginLeft: this.context.muiTheme.spacing.desktopGutter,
             },
             seedValue: {
-                width: 200,
+                width: 300,
                 marginLeft: this.context.muiTheme.spacing.desktopGutter,
             },
             seedControls: {
@@ -139,6 +149,7 @@ export default class RecommendationSeeds extends React.Component {
                 <div style={styles.header}>
                     <h3 style={styles.headerTitle}>Recommendation Seeds</h3>
                     <p style={styles.headerDescription}>Choose up to 5 genres, tracks, or artists</p>
+                    <p style={styles.headerDescription}>Tracks and artists can be copy and pasted using "Copy Spotify URI" or simply clicking and dragging</p>
                 </div>
                 <div
                     style={styles.content}>
