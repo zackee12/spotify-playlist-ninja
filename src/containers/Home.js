@@ -19,9 +19,7 @@ class Home extends React.Component {
 
     componentWillMount() {
         this.props.refreshAccessTokenAndProfile()
-            .catch((err) => {
-                console.log('Home Error', err);
-            });
+            .catch((err) => {});
     }
 
     getStyles() {

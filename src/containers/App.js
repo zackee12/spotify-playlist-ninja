@@ -41,6 +41,7 @@ class App extends React.Component {
             })
             .catch((err) => {
                 return this.props.dispatch(Actions.clearTokens())
+                    .then(() => this.props.dispatch(Actions.clearProfile()))
                     .then(() => Promise.reject(err));
             });
     };

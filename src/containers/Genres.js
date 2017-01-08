@@ -47,6 +47,10 @@ class Genres extends React.Component {
     fetchPlaylists = () => {
         this.setState({step: STEP_LOAD_PLAYLISTS}, () => {
             return this.props.refreshAccessTokenAndProfile()
+                .catch((err) => {
+                    helpers.redirectTo('/');
+                    return Promise.reject(err);
+                })
                 .then(() => {
                     return this.props.dispatch(Actions.clearPlaylists());
                 })

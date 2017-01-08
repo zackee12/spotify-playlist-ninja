@@ -46,6 +46,9 @@ class Recommendations extends React.Component {
         this.props.refreshAccessTokenAndProfile()
             .then(() => {
                 return this.props.dispatch(Actions.fetchGenreSeedsIfNeeded());
+            })
+            .catch((err) => {
+                helpers.redirectTo('/');
             });
     }
 

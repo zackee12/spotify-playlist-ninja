@@ -12,6 +12,13 @@ class Deduplicate extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.props.refreshAccessTokenAndProfile()
+            .catch((err) => {
+                helpers.redirectTo('/');
+            });
+    }
+
     getStyles() {
         return {
             root: {
