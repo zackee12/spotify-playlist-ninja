@@ -20,7 +20,7 @@ Auth test
     }
 
     if (window.location.hash && (window.opener || window.parent)) {
-        let targetOrigin = window.location.host === 'localhost:3000' ? 'http://localhost:3000' : 'https://zackee12.github.io/spotify-playlist-ninja';
+        let targetOrigin = window.location.host === 'localhost:3000' ? 'http://localhost:3000' : 'https://zackee12.github.io';
         let params = getParams();
         if (window.opener) window.opener.postMessage(params, targetOrigin);
         if (window.parent) window.parent.postMessage(params, targetOrigin);

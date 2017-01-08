@@ -136,7 +136,6 @@ export default class SpotifyApi {
             helpers.openPopup(uri, 'Spotity - Authorize', 400, 600)
                 .then(() => reject(new Error('dialog closed without signing in')));
         });
-        //window.location = buildUri(SpotifyApi.AUTH_URI, params);
     }
 
     static refreshAccessToken(csrfToken) {
@@ -155,7 +154,7 @@ export default class SpotifyApi {
             window.addEventListener('message', messageListener);
             setTimeout(() => {
                 reject(new Error('refresh access token timeout'));
-            }, 1000);
+            }, 500);
             document.getElementById('refresh-access-token-iframe').src = uri;
         });
     }
