@@ -58,8 +58,8 @@ class Recommendations extends React.Component {
     };
 
     onGetRecommendationsClick = () => {
-
-        return this.props.dispatch(Actions.clearRecommendations())
+        return this.props.dispatch(Actions.setProgress({percent: 50}))
+            .then(() => this.props.dispatch(Actions.clearRecommendations()))
             .then(() => {
                 this.setState({showCreatePlaylistDialog: true});
                 return this.props.dispatch(Actions.fetchRecommendationsIfNeeded(
@@ -68,8 +68,8 @@ class Recommendations extends React.Component {
                     this.state.genreSeeds,
                     this.state.tunables,
                     this.state.playlistSize));
-            });
-
+            })
+            .then(() => this.props.dispatch(Actions.clearProgress()));
     };
 
     onPlaylistSliderChange = (event, newValue) => {
@@ -253,11 +253,13 @@ class Recommendations extends React.Component {
                     <RecommendationSeeds genreSeeds={this.props.genreSeeds} onChange={this.onGenreSeedsChange}/>
                     <Divider />
                     <TunableAttributes onChange={this.onTunablesChange}/>
+                    {!this.props.isFetching &&
                     <FloatingActionButton
                         onClick={this.onGetRecommendationsClick}
                         style={styles.floatingBtn}>
                         <DoneAll />
                     </FloatingActionButton>
+                    }
                 </div>
                 }
                 <Dialog title="Operation complete" open={this.state.showCompletePlaylistDialog} actions={actions2} onRequestClose={this.onCompletePlaylistsDialogCloseClick}>
@@ -270,7 +272,7 @@ class Recommendations extends React.Component {
 
 function mapStateToProps(state) {
     const { genreSeeds, recommendations } = state;
-    return {genreSeeds: genreSeeds.array, recommendations: recommendations.object};
+    return {genreSeeds: genreSeeds.array, recommendations: recommendations.object, isFetching: recommendations.isFetching};
 }
 
 export default helpers.connectRedux(mapStateToProps, Recommendations);
