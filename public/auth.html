@@ -18,14 +18,14 @@ Auth test
             });
         return params;
     }
-
+    console.log(window.parent, window.opener, window.location.host);
     if (window.location.hash && (window.opener || window.parent)) {
         let targetOrigin = window.location.host === 'localhost:3000' ? 'http://localhost:3000' : 'https://zackee12.github.io';
         let params = getParams();
         if (window.opener) window.opener.postMessage(params, targetOrigin);
         if (window.parent) window.parent.postMessage(params, targetOrigin);
     } else {
-        window.location = '/';
+        //window.location = '/';
     }
 </script>
 </body>

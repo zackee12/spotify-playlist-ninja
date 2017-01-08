@@ -10,6 +10,7 @@ import LinearProgress from 'material-ui/LinearProgress';
 import Dialog from 'material-ui/Dialog';
 import SpotifyApi from '../utils/spotify-api';
 import Ninja from '../components/Ninja';
+import packageJSON from '../../package.json';
 
 const muiTheme = getMuiTheme(darkBaseTheme);
 
@@ -138,7 +139,7 @@ class App extends React.Component {
             />,
         ];
         const title = (
-                <span style={styles.appbarTitle}>Playlist Ninja</span>
+            <span style={styles.appbarTitle}>Playlist Ninja <small>v{packageJSON.version}</small></span>
 
         );
 
