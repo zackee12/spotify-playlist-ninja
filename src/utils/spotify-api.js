@@ -127,7 +127,6 @@ export default class SpotifyApi {
                     return reject(new Error(`incorrect origin '${event.origin}'`));
                 }
                 window.removeEventListener('message', messageListener);
-                console.log(event);
                 resolve(event.data);
                 event.source.close();
             };
@@ -147,7 +146,6 @@ export default class SpotifyApi {
                     return reject(new Error(`incorrect origin '${event.origin}'`));
                 }
                 window.removeEventListener('message', messageListener);
-                console.log(event);
                 resolve(event.data);
                 event.source.close();
             };
