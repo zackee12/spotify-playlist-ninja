@@ -23,4 +23,5 @@ ReactDOM.render(
  13. Fix redirecting if logged out and look into openning a new window
  14. add indeterminate progress on recommendations
  15. recommendation page needs protection for empty
+ 16. change recommendation to spotify uri to drag
  **/

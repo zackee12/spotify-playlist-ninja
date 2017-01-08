@@ -33,7 +33,7 @@ export const requestRecommendations = simpleCreatorPromiseFn(Actions.requestReco
 export function setAccessToken(accessToken) {
     return (dispatch, getState, api) => {
         api.accessToken = accessToken;
-        sessionStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('accessToken', accessToken);
         dispatch(Actions.setAccessToken(accessToken));
         return Promise.resolve();
     };
@@ -42,7 +42,7 @@ export function setAccessToken(accessToken) {
 export function clearAccessToken() {
     return (dispatch, getState, api) => {
         api.accessToken = null;
-        sessionStorage.removeItem('accessToken');
+        localStorage.removeItem('accessToken');
         dispatch(Actions.clearAccessToken());
         return Promise.resolve();
     };
@@ -50,7 +50,7 @@ export function clearAccessToken() {
 
 export function setCsrfToken(csrfToken) {
     return (dispatch, getState, api) => {
-        sessionStorage.setItem('csrfToken', csrfToken);
+        localStorage.setItem('csrfToken', csrfToken);
         dispatch(Actions.setCsrfToken(csrfToken));
         return Promise.resolve();
     };
@@ -59,7 +59,7 @@ export function setCsrfToken(csrfToken) {
 export function clearCsrfToken() {
     return (dispatch, getState, api) => {
         api.accessToken = null;
-        sessionStorage.removeItem('csrfToken');
+        localStorage.removeItem('csrfToken');
         dispatch(Actions.clearCsrfToken());
         return Promise.resolve();
     };

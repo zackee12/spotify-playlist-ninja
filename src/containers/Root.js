@@ -10,8 +10,8 @@ import Recommendations from './Recommendations';
 import Deduplicate from './Deduplicate';
 
 const store = configureStore({
-    accessToken: window.sessionStorage.getItem('accessToken'),
-    csrfToken: window.sessionStorage.getItem('csrfToken'),
+    accessToken: window.localStorage.getItem('accessToken'),
+    csrfToken: window.localStorage.getItem('csrfToken'),
 });
 
 export default class Root extends Component {

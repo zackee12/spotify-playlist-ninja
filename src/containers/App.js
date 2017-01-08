@@ -14,19 +14,50 @@ import Ninja from '../components/Ninja';
 const muiTheme = getMuiTheme(darkBaseTheme);
 
 class App extends React.Component {
+    refreshAccessTokenAndProfile = () => {
+        const csrfToken = SpotifyApi.generateCsrfToken();
+        return this.props.dispatch(Actions.setCsrfToken(csrfToken))
+            .then(() => {
+                return SpotifyApi.refreshAccessToken(csrfToken);
+            })
+            .then((data) => {
+                if (data.state !== csrfToken) {
+                    return Promise.reject(new Error(`Spotify CSRF token does not match`));
+                }
+                return this.props.dispatch(Actions.setAccessToken(data.access_token));
+            })
+            .then(() => {
+                return this.props.dispatch(Actions.fetchProfileIfNeeded());
+            })
+            .catch((err) => {
+                return this.props.dispatch(Actions.clearTokens())
+                    .then(() => Promise.reject(err));
+            });
+    };
 
     onLoginClick = () => {
         const csrfToken = SpotifyApi.generateCsrfToken();
         this.props.dispatch(Actions.setCsrfToken(csrfToken))
             .then(() => {
-                SpotifyApi.login(csrfToken);
+                return SpotifyApi.login(csrfToken);
+            })
+            .then((data) => {
+                if (data.state !== csrfToken) {
+                    return Promise.reject(new Error(`Spotify CSRF token does not match`));
+                }
+                return this.props.dispatch(Actions.setAccessToken(data.access_token));
+            })
+            .then(() => {
+                return this.props.dispatch(Actions.fetchProfileIfNeeded());
             });
     };
 
     onLogoutClick = () => {
         this.props.dispatch(Actions.clearTokens())
             .then(() => {
-                helpers.redirectTo('/');
+                if (this.props.location.pathname !== '/') {
+                    helpers.redirectTo('/');
+                }
             });
     };
 
@@ -130,7 +161,7 @@ class App extends React.Component {
                         <LinearProgress mode="determinate" value={progress.percent} color={muiTheme.palette.accent1Color}/>
                     </div>
                     <div style={styles.childContainer}>
-                        {React.cloneElement(this.props.children, {})}
+                        {React.cloneElement(this.props.children, {refreshAccessTokenAndProfile: this.refreshAccessTokenAndProfile})}
                     </div>
                     {error &&
                     <Dialog

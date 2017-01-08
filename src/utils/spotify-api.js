@@ -102,7 +102,7 @@ export default class SpotifyApi {
         return result;
     }
 
-    static login(csrfToken) {
+    static getImplicitGrantUriParameters(csrfToken) {
         const params = {
             client_id: 'a3092219dbb94bae90eab20bbb46d67c',
             response_type: 'token',
@@ -112,9 +112,52 @@ export default class SpotifyApi {
             show_dialog: 'false'
         };
         if (helpers.isDevelopmentSite()) {
-            params.redirect_uri = 'http://localhost:3000/';
+            params.redirect_uri = 'http://localhost:3000/auth.html';//'http://localhost:3000/';
         }
-        window.location = buildUri(SpotifyApi.AUTH_URI, params);
+        return params;
+
+    }
+
+    static login(csrfToken) {
+        return new Promise((resolve, reject) => {
+            const params = SpotifyApi.getImplicitGrantUriParameters(csrfToken);
+            const uri = buildUri(SpotifyApi.AUTH_URI, params);
+            const messageListener = (event) => {
+                if (!params.redirect_uri.startsWith(event.origin)) {
+                    return reject(new Error(`incorrect origin '${event.origin}'`));
+                }
+                window.removeEventListener('message', messageListener);
+                console.log(event);
+                resolve(event.data);
+                event.source.close();
+            };
+            window.addEventListener('message', messageListener);
+
+            helpers.openPopup(uri, 'Spotity - Authorize', 400, 600)
+                .then(() => reject(new Error('dialog closed without signing in')));
+        });
+        //window.location = buildUri(SpotifyApi.AUTH_URI, params);
+    }
+
+    static refreshAccessToken(csrfToken) {
+        return new Promise((resolve, reject) => {
+            const params = SpotifyApi.getImplicitGrantUriParameters(csrfToken);
+            const uri = buildUri(SpotifyApi.AUTH_URI, params);
+            const messageListener = (event) => {
+                if (!params.redirect_uri.startsWith(event.origin)) {
+                    return reject(new Error(`incorrect origin '${event.origin}'`));
+                }
+                window.removeEventListener('message', messageListener);
+                console.log(event);
+                resolve(event.data);
+                event.source.close();
+            };
+            window.addEventListener('message', messageListener);
+            setTimeout(() => {
+                reject(new Error('refresh access token timeout'));
+            }, 1000);
+            document.getElementById('refresh-access-token-iframe').src = uri;
+        });
     }
 
     set accessToken(value) {

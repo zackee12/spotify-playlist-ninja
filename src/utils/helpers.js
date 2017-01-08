@@ -73,6 +73,26 @@ function connectRedux(mapStateToProps, Component) {
     return connect(mapStateToPropsCreator(mapStateToProps))(Component)
 }
 
+function openPopup(uri, title, width, height) {
+    return new Promise((resolve) => {
+        const top = window.screen.height / 2 - height / 2;
+        const left = window.screen.width / 2 - width / 2;
+        const options = {
+            width, height, top, left,
+            menubar: 'no', toolbar: 'no', location: 'no', personalbar: 'no', status: 'no',
+            minimizable: 'no', dialog: 'yes', resizable: 'no', scrollbars: 'no',
+        };
+        const optionsStr = Object.keys(options).map(key => `${key}=${options[key]}`).join(',');
+        let authPopup = window.open(uri, title, optionsStr);
+        const timer = setInterval(() => {
+            if (authPopup && authPopup.closed) {
+                clearInterval(timer);
+                resolve();
+            }
+        }, 250);
+    });
+}
+
 export default {
     isDevelopmentSite,
     getSpecialPlaylists,
@@ -80,4 +100,5 @@ export default {
     clipNumber,
     redirectTo,
     connectRedux,
+    openPopup,
 };

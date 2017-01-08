@@ -22,6 +22,10 @@ class Genres extends React.Component {
         muiTheme: React.PropTypes.object
     };
 
+    static propTypes = {
+        refreshAccessTokenAndProfile: React.PropTypes.func.isRequired,
+    };
+
     state = {
         step: STEP_LOAD_PLAYLISTS,
         checkedPlaylists: null,
@@ -42,7 +46,7 @@ class Genres extends React.Component {
 
     fetchPlaylists = () => {
         this.setState({step: STEP_LOAD_PLAYLISTS}, () => {
-            return this.props.dispatch(Actions.fetchProfileIfNeeded())
+            return this.props.refreshAccessTokenAndProfile()
                 .then(() => {
                     return this.props.dispatch(Actions.clearPlaylists());
                 })

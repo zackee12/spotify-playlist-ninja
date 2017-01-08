@@ -19,6 +19,10 @@ class Recommendations extends React.Component {
         muiTheme: React.PropTypes.object
     };
 
+    static propTypes = {
+        refreshAccessTokenAndProfile: React.PropTypes.func.isRequired,
+    };
+
     state = {
         trackSeeds: null,
         artistSeeds: null,
@@ -39,7 +43,7 @@ class Recommendations extends React.Component {
     }
 
     componentDidMount() {
-        this.props.dispatch(Actions.fetchProfileIfNeeded())
+        this.props.refreshAccessTokenAndProfile()
             .then(() => {
                 return this.props.dispatch(Actions.fetchGenreSeedsIfNeeded());
             });
