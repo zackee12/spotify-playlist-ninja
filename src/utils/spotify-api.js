@@ -123,7 +123,6 @@ export default class SpotifyApi {
             const params = SpotifyApi.getImplicitGrantUriParameters(csrfToken);
             const uri = buildUri(SpotifyApi.AUTH_URI, params);
             const messageListener = (event) => {
-                console.log(event);
                 if (!params.redirect_uri.startsWith(event.origin)) {
                     return reject(new Error(`incorrect origin '${event.origin}'`));
                 }
@@ -144,7 +143,6 @@ export default class SpotifyApi {
             const params = SpotifyApi.getImplicitGrantUriParameters(csrfToken);
             const uri = buildUri(SpotifyApi.AUTH_URI, params);
             const messageListener = (event) => {
-                console.log(event);
                 if (!params.redirect_uri.startsWith(event.origin)) {
                     return reject(new Error(`incorrect origin '${event.origin}'`));
                 }
