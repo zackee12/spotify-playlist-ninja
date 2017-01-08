@@ -253,7 +253,7 @@ class Recommendations extends React.Component {
                     <RecommendationSeeds genreSeeds={this.props.genreSeeds} onChange={this.onGenreSeedsChange}/>
                     <Divider />
                     <TunableAttributes onChange={this.onTunablesChange}/>
-                    {!this.props.isFetching &&
+                    {!this.props.isFetching && this.state.playlistName.length > 0 &&
                     <FloatingActionButton
                         onClick={this.onGetRecommendationsClick}
                         style={styles.floatingBtn}>
