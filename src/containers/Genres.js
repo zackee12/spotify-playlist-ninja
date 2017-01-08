@@ -128,16 +128,16 @@ class Genres extends React.Component {
         return {
             root: {},
             header: {
-                backgroundColor: '#111'
+                backgroundColor: this.context.muiTheme.palette.darkestBackground
             },
             message: {
-                backgroundColor: '#222',
+                backgroundColor: this.context.muiTheme.palette.darkBackground
             },
             messageText: {
                 margin: 0,
             },
             workspace: {
-                backgroundColor: '#333'
+                //backgroundColor: '#333'
             },
             floatingBtn: {
                 position: 'fixed',

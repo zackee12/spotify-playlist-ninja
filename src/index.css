@@ -2,38 +2,44 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
-    box-sizing: border-box;
 }
 
-::-webkit-scrollbar-track {
-    background-color: #1c1c1f;
+* {
+    box-sizing: border-box !important;
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
-    background-color: #1c1c1f;
+    background-color: #191414;
+}
+
+::-webkit-scrollbar:vertical {
+    width: 8px;
 }
 
 ::-webkit-scrollbar:horizontal {
-    height: 10px;
+    height: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-    border: 1px solid #1c1c1f;
-    border-radius: 10px;
-    background-color: #323438;
+    border: 1px solid #191414;
+    border-radius: 2px;
+    background-color: #404040;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #191414;
 }
 
 ::-webkit-scrollbar-corner {
-    background-color: #1c1c1f;
+    background-color: #191414;
 }
 
 body, html {
-    scrollbar-arrow-color: #323438;
-    scrollbar-track-color: #1c1c1f;
-    scrollbar-face-color: #323438;
-    scrollbar-highlight-color: #1c1c1f;
-    scrollbar-3dlight-color: #1c1c1f;
-    scrollbar-shadow-color: #1c1c1f;
-    scrollbar-darkshadow-color: #1c1c1f;
+    scrollbar-arrow-color: #404040;
+    scrollbar-track-color: #191414;
+    scrollbar-face-color: #404040;
+    scrollbar-highlight-color: #191414;
+    scrollbar-3dlight-color: #191414;
+    scrollbar-shadow-color: #191414;
+    scrollbar-darkshadow-color: #191414;
 }

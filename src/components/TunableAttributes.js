@@ -299,8 +299,7 @@ export default class TunableAttributes extends React.Component {
                     <h3 style={styles.headerTitle}>Tunable Attributes</h3>
                     <p style={styles.headerDescription}>Choose target, min, and max attributes</p>
                 </div>
-                <div
-                    style={styles.content}>
+                <div style={styles.content}>
                     <div style={styles.tunableControls}>
                         <RaisedButton label="Add" onClick={this.onAddTuneableBtnClick} disabled={this.state.tunables.length >= 42}/>
                         <RaisedButton label="Remove" onClick={this.onRemoveTuneableBtnClick} disabled={this.state.tunables.length <= 0}/>
@@ -344,29 +343,30 @@ export default class TunableAttributes extends React.Component {
                 </div>
             </FlexContainer>
             <Divider />
-            <div style={styles.descriptionContainer}>
-                <h1>Tunable Attributes</h1>
+            <div style={styles.descriptionParent}>
+                <div style={styles.descriptionContainer}>
+                    <h1>Tunable Attributes</h1>
+                </div>
+                <div style={styles.descriptionContainer}>
+                    <h3>Types</h3>
+                    <h4>Target</h4>
+                    <p style={styles.description}>For each of the tunable track attributes (below) a target value may be provided. Tracks with the attribute values nearest to the target values will be preferred. For example, you might request target_energy=0.6 and target_danceability=0.8. All target values will be weighed equally in ranking results.</p>
+                    <h4>Max</h4>
+                    <p style={styles.description}>For each tunable track attribute, a hard ceiling on the selected track attribute’s value can be provided. See tunable track attributes below for the list of available options. For example, max_instrumentalness=0.35 would filter out most tracks that are likely to be instrumental.</p>
+                    <h4>Min </h4>
+                    <p style={styles.description}>For each tunable track attribute, a hard floor on the selected track attribute’s value can be provided. See tunable track attributes below for the list of available options. For example, min_tempo=140 would restrict results to only those tracks with a tempo of greater than 140 beats per minute.</p>
+                </div>
+                <Divider />
+                <div style={styles.descriptionContainer}>
+                    <h3>Descriptions</h3>
+                    {ATTRIBUTES.map((attribute, index) =>
+                        <div key={`tuneables_description_${index}`}>
+                            <h4>{attribute.name}</h4>
+                            <p style={styles.description}>{attribute.description}</p>
+                        </div>
+                    )}
+                </div>
             </div>
-            <div style={styles.descriptionContainer}>
-                <h3>Types</h3>
-                <h4>Target</h4>
-                <p style={styles.description}>For each of the tunable track attributes (below) a target value may be provided. Tracks with the attribute values nearest to the target values will be preferred. For example, you might request target_energy=0.6 and target_danceability=0.8. All target values will be weighed equally in ranking results.</p>
-                <h4>Max</h4>
-                <p style={styles.description}>For each tunable track attribute, a hard ceiling on the selected track attribute’s value can be provided. See tunable track attributes below for the list of available options. For example, max_instrumentalness=0.35 would filter out most tracks that are likely to be instrumental.</p>
-                <h4>Min </h4>
-                <p style={styles.description}>For each tunable track attribute, a hard floor on the selected track attribute’s value can be provided. See tunable track attributes below for the list of available options. For example, min_tempo=140 would restrict results to only those tracks with a tempo of greater than 140 beats per minute.</p>
-            </div>
-            <Divider />
-            <div style={styles.descriptionContainer}>
-                <h3>Descriptions</h3>
-                {ATTRIBUTES.map((attribute, index) =>
-                    <div key={`tuneables_description_${index}`}>
-                        <h4>{attribute.name}</h4>
-                        <p style={styles.description}>{attribute.description}</p>
-                    </div>
-                )}
-            </div>
-
         </div>
         );
     }

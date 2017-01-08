@@ -113,13 +113,7 @@ class Recommendations extends React.Component {
     getStyles() {
         return {
             header: {
-                backgroundColor: '#111'
-            },
-            feature1: {
-                backgroundColor: '#222',
-            },
-            feature2: {
-                backgroundColor: '#333',
+                backgroundColor: this.context.muiTheme.palette.darkestBackground
             },
             sliderOuter: {
                 height: 200,

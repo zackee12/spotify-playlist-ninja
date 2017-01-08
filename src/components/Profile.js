@@ -1,6 +1,5 @@
 import React from 'react';
 import Avatar from 'material-ui/Avatar';
-import FlexContainer from './FlexContainer';
 
 export default class Profile extends React.Component {
 
@@ -15,12 +14,8 @@ export default class Profile extends React.Component {
 
     getStyles() {
         return {
-            root: {
-
-            },
-            content: {
-                paddingLeft: this.context.muiTheme.spacing.desktopGutter,
-            },
+            root: {},
+            content: {},
             label: {
                 color: this.context.muiTheme.palette.secondaryTextColor,
             },
@@ -39,31 +34,27 @@ export default class Profile extends React.Component {
         styles.root = Object.assign(styles.root, this.props.style);
         const profile = this.props.profile;
         const image = profile.images && profile.images.length > 0 ? profile.images[profile.images.length - 1].url : null;
+        const followers = profile.followers ? profile.followers.total : '-';
         return (
-            <FlexContainer style={styles.root}
-                           flexAlignContent="center"
-                           flexAlignItems="center"
-                           flexDirection="row"
-                           flexJustifyContent="center"
-                           flexWrap="wrap">
-                <Avatar src={image} size={200} style={styles.p} />
+            <div style={styles.root}>
+                <Avatar src={image} size={150} style={styles.img} />
                 <div style={styles.content}>
                     <label style={styles.label}>Display Name</label>
-                    <p style={styles.value}>{profile.display_name}</p>
+                    <p style={styles.value}>{profile.display_name || '-'}</p>
                     <label style={styles.label}>Email</label>
-                    <p style={styles.value}>{profile.email}</p>
+                    <p style={styles.value}>{profile.email || '-'}</p>
                     <label style={styles.label}>Spotify User ID</label>
-                    <p style={styles.value}>{profile.id}</p>
+                    <p style={styles.value}>{profile.id || '-'}</p>
                     <label style={styles.label}>Spotify Uri</label>
-                    <p style={styles.value}>{profile.uri}</p>
+                    <p style={styles.value}>{profile.uri || '-'}</p>
                     <label style={styles.label}>Country</label>
-                    <p style={styles.value}>{profile.country}</p>
+                    <p style={styles.value}>{profile.country || '-'}</p>
                     <label style={styles.label}>Product</label>
-                    <p style={styles.value}>{profile.product}</p>
+                    <p style={styles.value}>{profile.product || '-'}</p>
                     <label style={styles.label}>Followers</label>
-                    <p style={styles.value}>{profile.followers.total}</p>
+                    <p style={styles.value}>{followers}</p>
                 </div>
-            </FlexContainer>
+            </div>
         );
     }
 }

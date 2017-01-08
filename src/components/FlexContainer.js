@@ -19,7 +19,6 @@ export default class FlexContainer extends React.Component {
     getStyles() {
         let styles = {
             root: {
-                boxSizing: 'border-box',
                 backgroundColor: this.context.muiTheme.palette.canvasColor,
                 color: this.context.muiTheme.palette.textColor,
                 padding: this.context.muiTheme.spacing.desktopGutter,

@@ -3,18 +3,27 @@ import helpers from '../utils/helpers';
 import Actions from '../actions'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import darkTheme from '../utils/dark-theme';
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import LinearProgress from 'material-ui/LinearProgress';
 import Dialog from 'material-ui/Dialog';
+import Drawer from 'material-ui/Drawer';
 import SpotifyApi from '../utils/spotify-api';
 import Ninja from '../components/Ninja';
 import packageJSON from '../../package.json';
-
-const muiTheme = getMuiTheme(darkBaseTheme);
+import Profile from '../components/Profile';
+import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
+import IconButton from 'material-ui/IconButton';
+const muiTheme = getMuiTheme(darkTheme);
 
 class App extends React.Component {
+
+    state = {
+        drawerOpen: false,
+    };
+
     refreshAccessTokenAndProfile = () => {
         const csrfToken = SpotifyApi.generateCsrfToken();
         return this.props.dispatch(Actions.setCsrfToken(csrfToken))
@@ -55,6 +64,7 @@ class App extends React.Component {
 
     onLogoutClick = () => {
         this.props.dispatch(Actions.clearTokens())
+            .then(() => this.props.dispatch(Actions.clearProfile()))
             .then(() => {
                 if (this.props.location.pathname !== '/') {
                     helpers.redirectTo('/');
@@ -64,6 +74,16 @@ class App extends React.Component {
 
     onTitleTouchTap = () => {
         helpers.redirectTo('/');
+    };
+
+    onDrawerToggleClick = () => {
+        this.setState((state) => {
+            return {drawerOpen: !state.drawerOpen};
+        });
+    };
+
+    onDrawerRequestChange = (open, reason) => {
+        this.setState({drawerOpen: open});
     };
 
     onErrorDialogClick = () => {
@@ -80,7 +100,7 @@ class App extends React.Component {
                 cursor: 'pointer'
             },
             childContainer: {
-                backgroundColor: muiTheme.palette.canvasColor,
+                backgroundColor: muiTheme.palette.darkestBackground,
                 height: `calc(100vh - ${appBarHeight}px)`,
                 width: '100vw',
                 margin: `${appBarHeight}px 0 0 0`,
@@ -112,24 +132,25 @@ class App extends React.Component {
                 order: 2,
                 alignSelf: 'center',
             },
-            logBtn: {
-                flexGrow: 0,
-                flexShrink: 1,
-                flexBasis: 0,
-                order: 3,
-            },
             title: {
                 flexGrow: 1,
                 flexShrink: 1,
                 flexBasis: 0,
                 order: 1,
+            },
+            drawer: {
+                padding: muiTheme.spacing.desktopGutter,
+            },
+            drawerIconButton: {
+                top: -16,
+                left: -16,
             }
 
         };
     }
 
     render() {
-        const { progress, error } = this.props;
+        const { profile, progress, error } = this.props;
         const styles = this.getStyles();
         const actions = [
             <FlatButton
@@ -143,10 +164,6 @@ class App extends React.Component {
 
         );
 
-        const appBarBtn = this.props.hasAccessToken ?
-            <FlatButton label="Logout" onClick={this.onLogoutClick} /> :
-            <FlatButton label="Login" onClick={this.onLoginClick}  />;
-
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div style={styles.parentContainer}>
@@ -154,15 +171,14 @@ class App extends React.Component {
                         <AppBar
                             title={title}
                             onTitleTouchTap={this.onTitleTouchTap}
-                            iconElementLeft={null}
-                            iconElementRight={appBarBtn}
-                            iconStyleRight={styles.logBtn}
+                            onLeftIconButtonTouchTap={this.onDrawerToggleClick}
                             titleStyle={styles.title}
                         ><Ninja interval={200} enabled={progress.percent !== 100.0} style={styles.ninja}/></AppBar>
-                        <LinearProgress mode="determinate" value={progress.percent} color={muiTheme.palette.accent1Color}/>
+                        <LinearProgress mode="determinate" value={progress.percent}/>
                     </div>
                     <div style={styles.childContainer}>
-                        {React.cloneElement(this.props.children, {refreshAccessTokenAndProfile: this.refreshAccessTokenAndProfile})}
+                        {React.cloneElement(this.props.children, {refreshAccessTokenAndProfile: this.refreshAccessTokenAndProfile,
+                                                                  login: this.onLoginClick, logout: this.onLogoutClick})}
                     </div>
                     {error &&
                     <Dialog
@@ -172,8 +188,31 @@ class App extends React.Component {
                         open={true}>
                         {error.message}
                     </Dialog>}
+                    <Drawer
+                        docked={false}
+                        width={300}
+                        open={this.state.drawerOpen}
+                        onRequestChange={this.onDrawerRequestChange}
+                    >
+                        <div style={styles.drawer}>
+                        <IconButton onTouchTap={this.onDrawerToggleClick} style={styles.drawerIconButton}>
+                            <NavigationMenu />
+                        </IconButton>
+                        {profile &&
+                            <div>
+                                <Profile profile={profile}/>
+                                <RaisedButton label="Logout" onClick={this.onLogoutClick} />
+                            </div>
+                        }
+                        {!profile &&
+                            <div>
+                                <Profile profile={{}}/>
+                                <RaisedButton label="Login" onClick={this.onLoginClick} />
+                            </div>
+                        }
+                        </div>
+                    </Drawer>
                 </div>
-
             </MuiThemeProvider>
         );
     }
@@ -182,7 +221,7 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
     const { accessToken, profile, progress, error } = state;
-    return {accessToken, profile, progress, error};
+    return {accessToken, profile: profile.object, progress, error};
 }
 
 export default helpers.connectRedux(mapStateToProps, App);
