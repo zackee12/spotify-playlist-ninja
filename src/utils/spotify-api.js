@@ -106,13 +106,13 @@ export default class SpotifyApi {
         const params = {
             client_id: 'a3092219dbb94bae90eab20bbb46d67c',
             response_type: 'token',
-            redirect_uri: 'https://zackee12.github.io/spotify-playlist-ninja/',
+            redirect_uri: 'https://zackee12.github.io/spotify-playlist-ninja/auth.html',
             state: csrfToken,
             scope: 'playlist-read-private playlist-read-collaborative user-follow-read user-library-read user-read-private user-read-email user-top-read playlist-modify-public playlist-modify-private',
             show_dialog: 'false'
         };
         if (helpers.isDevelopmentSite()) {
-            params.redirect_uri = 'http://localhost:3000/auth.html';//'http://localhost:3000/';
+            params.redirect_uri = 'http://localhost:3000/auth.html';
         }
         return params;
 
