@@ -91,6 +91,7 @@ function fetchProfile() {
             .then((profile) => dispatch(setProfile(profile)))
             .catch((err) => {
                 return dispatch(setError(err))
+                    .then(() => dispatch(clearProfile()))
                     .then(() => {
                         return Promise.reject(err);
                     });
@@ -189,6 +190,7 @@ function fetchGenreSeeds() {
             .then((genres) => dispatch(setGenreSeeds(genres.genres)))
             .catch((err) => {
                 return dispatch(setError(err))
+                    .then(() => dispatch(clearGenreSeeds()))
                     .then(() => {
                         return Promise.reject(err);
                     });
@@ -218,6 +220,7 @@ function fetchRecommendations(seedTracks, seedArtists, seedGenres, tuneables, nu
             })
             .catch((err) => {
                 return dispatch(setError(err))
+                    .then(() => dispatch(clearRecommendations()))
                     .then(() => {
                         return Promise.reject(err);
                     });

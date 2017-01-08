@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Auth</title>
 </head>
 <body>
-Auth test
 <script>
     function getParams() {
         let params = {};
@@ -24,7 +22,7 @@ Auth test
         if (window.opener) window.opener.postMessage(params, targetOrigin);
         if (window.parent) window.parent.postMessage(params, targetOrigin);
     } else {
-        window.location = '/';
+        window.location = window.location.host === 'localhost:3000' ? '/': '/spotify-playlist-ninja';
     }
 </script>
 </body>
