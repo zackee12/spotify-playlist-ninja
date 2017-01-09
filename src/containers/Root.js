@@ -21,7 +21,6 @@ export default class Root extends Component {
                 <Router history={hashHistory}>
                     <Route path="/" component={App}>
                         <IndexRoute component={Home}/>
-                        <Route path="access_token=:accessToken&token_type=:tokenType&expires_in=:expiresIn&state=:csrfToken" component={AuthCallback}/>
                         <Route path="/genres" components={Genres}/>
                         <Route path="/deduplicate" components={Deduplicate}/>
                         <Route path="/recommendations" components={Recommendations}/>
